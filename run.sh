@@ -10,12 +10,16 @@ case "${1:-}" in
         shift
         exec python3 -m src.assembler "$@"
         ;;
+    interpret)
+        shift
+        exec python3 -m src.interpreter "$@"
+        ;;
     test)
         shift
         exec python3 -m unittest discover -s "$PROJECT_DIR/tests" -v "$@"
         ;;
     *)
-        printf 'Usage: %s {assemble|test} [args...]\n' "$0" >&2
+        printf 'Usage: %s {assemble|interpret|test} [args...]\n' "$0" >&2
         exit 2
         ;;
 esac
