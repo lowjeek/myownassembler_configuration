@@ -43,8 +43,8 @@ class VirtualMachine:
             self.accumulator = self.read(self.accumulator + operand)
         elif opcode is Opcode.WRITE:
             self.write(operand, self.accumulator)
-        else:
-            raise ValueError(f"команда {opcode.name} пока не реализована")
+        elif opcode is Opcode.ABS:
+            self.accumulator = abs(self.read(self.accumulator))
 
     def run(self, code):
         """Декодировать и выполнить все команды из отдельной памяти кода."""

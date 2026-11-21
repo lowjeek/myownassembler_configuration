@@ -56,3 +56,13 @@ class MachineTests(unittest.TestCase):
             with self.subTest(start=start, end=end):
                 with self.assertRaises(ValueError):
                     machine.dump(start, end)
+
+    def test_abs_of_minimum_literal(self):
+        """Модуль минимальной константы доходит до памяти как 65536."""
+        machine = run_example("abs.asm")
+        self.assertEqual(machine.dump(30, 31), {"30": -65536, "31": 65536})
+
+    def test_abs_uses_accumulator_as_address(self):
+        """При ABS проверяется адрес операнда, хранящийся в аккумуляторе."""
+        with self.assertRaisesRegex(ValueError, r"байт 3: адрес"):
+            VirtualMachine().run(bytes.fromhex("FF FF FF 33"))
