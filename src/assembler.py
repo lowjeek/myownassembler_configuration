@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import re
 
+from .codec import encode_instruction, format_bytes
 from .isa import FORMATS, Instruction, Opcode
 
 
@@ -60,11 +61,15 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         program = parse_program(args.source.read_text(encoding="utf-8"))
+        chunks = [encode_instruction(command) for command in program]
+        data = b"".join(chunks)
+        args.output.write_bytes(data)
     except (OSError, ValueError) as error:
         parser.error(str(error))
     if args.test:
-        for instruction in program:
-            print(instruction.describe_fields())
+        for chunk in chunks:
+            print(format_bytes(chunk))
+    print(f"Размер двоичного файла: {len(data)} байт")
 
 
 if __name__ == "__main__":
